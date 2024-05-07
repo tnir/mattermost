@@ -7,7 +7,7 @@
     "redoc-cli": "0.13.17",
     "swagger-cli": "4.0.4",
     "sync-fetch": "0.4.1",
-    "yaml": "2.1.1"
+    "yaml": "2.2.2"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
