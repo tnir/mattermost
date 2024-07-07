@@ -81,7 +81,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_DEV_TOKEN }}
 
       - name: cd/setup-cosign
-        uses: sigstore/cosign-installer@11086d25041f77fe8fe7b9ea4e48e3b9192b8f19 # v3.1.2
+        uses: sigstore/cosign-installer@59acb6260d9c0ba8f4a2f9d9b48431a222b68e20 # v3.5.0
         with:
           cosign-release: v${{ env.COSIGN_VERSION }}
 
