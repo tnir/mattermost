@@ -24,7 +24,7 @@ jobs:
       BUILD_IMAGE: mattermost/mattermost-build-server:1.21.8
     steps:
       - name: Checkout mattermost project
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
       - name: Calculate Golang Version
         id: go
         working-directory: ./server

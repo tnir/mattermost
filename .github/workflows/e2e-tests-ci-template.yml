@@ -99,7 +99,7 @@ jobs:
     steps:
       - name: ci/checkout-repo
         if: "${{ inputs.run_preflight_checks }}"
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
         with:
           ref: ${{ inputs.commit_sha }}
           fetch-depth: 0
@@ -130,7 +130,7 @@ jobs:
     steps:
       - name: ci/checkout-repo
         if: "${{ inputs.run_preflight_checks }}"
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
         with:
           ref: ${{ inputs.commit_sha }}
           fetch-depth: 0
@@ -168,7 +168,7 @@ jobs:
       workers: "${{ steps.generate.outputs.workers }}"
     steps:
       - name: ci/checkout-repo
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
         with:
           ref: ${{ inputs.commit_sha }}
           fetch-depth: 0
@@ -192,7 +192,7 @@ jobs:
       status_check_url: "${{ steps.e2e-test-gencycle.outputs.status_check_url }}"
     steps:
       - name: ci/checkout-repo
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
         with:
           ref: ${{ inputs.commit_sha }}
           fetch-depth: 0
@@ -265,7 +265,7 @@ jobs:
       CWS_EXTRA_HTTP_HEADERS: "${{ secrets.CWS_EXTRA_HTTP_HEADERS }}"
     steps:
       - name: ci/checkout-repo
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
         with:
           ref: ${{ inputs.commit_sha }}
           fetch-depth: 0
@@ -309,7 +309,7 @@ jobs:
       failures: "${{ steps.calculate-failures.outputs.failures }}"
     steps:
       - name: ci/checkout-repo
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
         with:
           ref: ${{ inputs.commit_sha }}
           fetch-depth: 0
