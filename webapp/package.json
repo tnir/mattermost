@@ -57,48 +57,52 @@
     "webpack-dev-server": "5.1.0"
   },
   "overrides": {
+    "@mattermost/compass-components": {
+      "react": "18.3.1",
+      "react-dom": "18.3.1"
+    },
     "@floating-ui/react": {
-      "react": "17.0.2",
-      "react-dom": "17.0.2"
+      "react": "18.3.1",
+      "react-dom": "18.3.1"
     },
     "@giphy/react-components": {
       "styled-components": "5.3.6"
     },
     "@mui/base": {
-      "react": "17.0.2",
-      "react-dom": "17.0.2"
+      "react": "18.3.1",
+      "react-dom": "18.3.1"
     },
     "enzyme-adapter-utils": {
-      "react": "17.0.2",
-      "react-dom": "17.0.2"
+      "react": "18.3.1",
+      "react-dom": "18.3.1"
     },
     "react-bootstrap": {
-      "react": "17.0.2",
-      "react-dom": "17.0.2"
+      "react": "18.3.1",
+      "react-dom": "18.3.1"
     },
     "react-color": {
-      "react": "17.0.2",
-      "react-dom": "17.0.2"
+      "react": "18.3.1",
+      "react-dom": "18.3.1"
     },
     "react-contextmenu": {
-      "react": "17.0.2",
-      "react-dom": "17.0.2"
+      "react": "18.3.1",
+      "react-dom": "18.3.1"
     },
     "react-custom-scrollbars": {
-      "react": "17.0.2",
-      "react-dom": "17.0.2"
+      "react": "18.3.1",
+      "react-dom": "18.3.1"
     },
     "react-overlays": {
-      "react": "17.0.2",
-      "react-dom": "17.0.2"
+      "react": "18.3.1",
+      "react-dom": "18.3.1"
     },
     "react-select": {
-      "react": "17.0.2",
-      "react-dom": "17.0.2"
+      "react": "18.3.1",
+      "react-dom": "18.3.1"
     },
     "react-transition-group": {
-      "react": "17.0.2",
-      "react-dom": "17.0.2"
+      "react": "18.3.1",
+      "react-dom": "18.3.1"
     },
     "braces": "3.0.3",
     "cheerio": "1.0.0-rc.12",

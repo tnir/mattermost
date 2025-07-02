@@ -4,7 +4,7 @@
 /* eslint-disable no-console */
 
 import {configure} from 'enzyme';
-import Adapter from 'enzyme-adapter-react-17-updated';
+import Adapter from '@zarconontol/enzyme-adapter-react-18';
 
 import '@testing-library/jest-dom';
 import 'isomorphic-fetch';
