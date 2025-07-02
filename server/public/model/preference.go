@@ -66,6 +66,9 @@ const (
 	// Possible Name values are:
 	// - PreferenceNameEmailInterval
 	PreferenceCategoryNotifications = "notifications"
+	// PreferenceCategoryLinkPreviewDomainSettings is used to store the user's domain-specific link preview settings.
+	// The Name field is the domain name, and the Value field is "true" to enable or "false" to disable previews for that domain.
+	PreferenceCategoryLinkPreviewDomainSettings = "link_preview_domain_settings"
 
 	// Deprecated: PreferenceRecommendedNextSteps is not used anymore.
 	// Use PreferenceCategoryRecommendedNextSteps instead.

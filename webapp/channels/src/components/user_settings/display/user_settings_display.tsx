@@ -28,6 +28,7 @@ import {a11yFocus} from 'utils/utils';
 
 import ManageLanguages from './manage_languages';
 import ManageTimezones from './manage_timezones';
+import ManageLinkPreviewDomains from './manage_link_preview_domains';
 import RenderEmoticonsAsEmoji from './render_emoticons_as_emoji';
 
 import SettingDesktopHeader from '../headers/setting_desktop_header';
@@ -721,6 +722,17 @@ export default class UserSettingsDisplay extends React.PureComponent<Props, Stat
             this.prevSections.message_display = this.prevSections.linkpreview;
         }
 
+        let linkPreviewDomainsSection = null;
+        if (this.props.enableLinkPreviews) {
+            linkPreviewDomainsSection = (
+                <ManageLinkPreviewDomains
+                    updateSection={this.updateSection}
+                    active={this.props.activeSection === 'linkPreviewDomains'}
+                    areAllSectionsInactive={this.props.activeSection === ''}
+                />
+            );
+        }
+
         let lastActiveSection = null;
 
         if (this.props.lastActiveTimeEnabled) {
@@ -1224,6 +1236,7 @@ export default class UserSettingsDisplay extends React.PureComponent<Props, Stat
                     {lastActiveSection}
                     {timezoneSelection}
                     {linkPreviewSection}
+                    {linkPreviewDomainsSection}
                     {collapseSection}
                     {messageDisplaySection}
                     {clickToReply}

@@ -80,6 +80,8 @@ const Preferences = {
 
     CATEGORY_OVERAGE_USERS_BANNER: 'overage_users_banner',
 
+    CATEGORY_LINK_PREVIEW_DOMAIN_SETTINGS: 'link_preview_domain_settings',
+
     CATEGORY_THEME: 'theme',
     THEMES: {
         denim: {
