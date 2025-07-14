@@ -5,7 +5,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 interface Props {
-    children: React.ReactNode | React.ReactNodeArray;
+    children: React.ReactNode;
 }
 export default class RootPortal extends React.PureComponent<Props> {
     private el: HTMLDivElement;
