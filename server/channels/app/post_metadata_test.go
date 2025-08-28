@@ -3346,3 +3346,52 @@ func TestGetLinkMetadataFromCache(t *testing.T) {
 		assertCached(t, nilURL, nil, nil, nil)
 	})
 }
+
+func TestIsLinkAllowedForPreviewWithUserPreferences(t *testing.T) {
+	th := Setup(t).InitBasic()
+	defer th.TearDown()
+
+	user := th.BasicUser
+
+	t.Run("should allow preview when no user preference exists", func(t *testing.T) {
+		allowed := th.App.isLinkAllowedForPreview(th.Context, "https://example.com", user.Id)
+		assert.True(t, allowed)
+	})
+
+	t.Run("should block preview when user has disabled domain", func(t *testing.T) {
+		// Set user preference to disable previews for example.com
+		preference := &model.Preference{
+			UserId:   user.Id,
+			Category: model.PreferenceCategoryLinkPreviewDomainSettings,
+			Name:     "example.com",
+			Value:    "false",
+		}
+		
+		_, err := th.App.Srv().Store().Preference().Save([]*model.Preference{preference})
+		require.NoError(t, err)
+
+		allowed := th.App.isLinkAllowedForPreview(th.Context, "https://example.com/page", user.Id)
+		assert.False(t, allowed)
+	})
+
+	t.Run("should allow preview when user has enabled domain", func(t *testing.T) {
+		// Set user preference to enable previews for test.com
+		preference := &model.Preference{
+			UserId:   user.Id,
+			Category: model.PreferenceCategoryLinkPreviewDomainSettings,
+			Name:     "test.com",
+			Value:    "true",
+		}
+		
+		_, err := th.App.Srv().Store().Preference().Save([]*model.Preference{preference})
+		require.NoError(t, err)
+
+		allowed := th.App.isLinkAllowedForPreview(th.Context, "https://test.com/page", user.Id)
+		assert.True(t, allowed)
+	})
+
+	t.Run("should work with empty user ID", func(t *testing.T) {
+		allowed := th.App.isLinkAllowedForPreview(th.Context, "https://example.com", "")
+		assert.True(t, allowed)
+	})
+}

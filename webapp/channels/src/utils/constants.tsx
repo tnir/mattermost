@@ -67,6 +67,7 @@ export const Preferences = {
     CATEGORY_DIRECT_CHANNEL_SHOW: ReduxPreferences.CATEGORY_DIRECT_CHANNEL_SHOW,
     CATEGORY_GROUP_CHANNEL_SHOW: ReduxPreferences.CATEGORY_GROUP_CHANNEL_SHOW,
     CATEGORY_DISPLAY_SETTINGS: 'display_settings',
+    CATEGORY_LINK_PREVIEW_DOMAIN_SETTINGS: 'link_preview_domain_settings',
     CATEGORY_SIDEBAR_SETTINGS: 'sidebar_settings',
     CATEGORY_ADVANCED_SETTINGS: 'advanced_settings',
     TUTORIAL_STEP: 'tutorial_step',

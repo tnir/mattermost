@@ -180,7 +180,7 @@ func (a *App) getEmbedsAndImages(c request.CTX, post *model.Post, isNewPost bool
 	}
 
 	// Embeds and image dimensions
-	firstLink, images := a.getFirstLinkAndImages(c, post.Message)
+	firstLink, images := a.getFirstLinkAndImages(c, post.Message, post.UserId)
 
 	if unsafeLinksProp := post.GetProp(model.PostPropsUnsafeLinks); unsafeLinksProp != nil {
 		if prop, ok := unsafeLinksProp.(string); ok && prop == "true" {
@@ -490,7 +490,7 @@ func (a *App) getCustomEmojisForPost(c request.CTX, post *model.Post, reactions 
 	return a.GetMultipleEmojiByName(c, names)
 }
 
-func (a *App) isLinkAllowedForPreview(rctx request.CTX, link string) bool {
+func (a *App) isLinkAllowedForPreview(rctx request.CTX, link string, userID string) bool {
 	domains := normalizeDomains(*a.Config().ServiceSettings.RestrictLinkPreviews)
 	for _, d := range domains {
 		parsed, err := url.Parse(link)
@@ -508,6 +508,25 @@ func (a *App) isLinkAllowedForPreview(rctx request.CTX, link string) bool {
 			return false
 		}
 		if strings.Contains(cleaned, d) {
+			return false
+		}
+	}
+
+	// Check user-specific domain preferences if userID is provided
+	if userID != "" {
+		parsed, err := url.Parse(link)
+		if err != nil {
+			return false
+		}
+		
+		hostname := parsed.Hostname()
+		if hostname == "" {
+			return true
+		}
+		
+		// Check if user has explicitly disabled previews for this domain
+		preference, appErr := a.GetPreferenceByCategoryAndNameForUser(rctx, userID, model.PreferenceCategoryLinkPreviewDomainSettings, hostname)
+		if appErr == nil && preference.Value == "false" {
 			return false
 		}
 	}
@@ -532,22 +551,22 @@ func normalizeDomains(domains string) []string {
 // Given a string, returns the first autolinked URL in the string as well as an array of all Markdown
 // images of the form ![alt text](image url). Note that this does not return Markdown links of the
 // form [text](url).
-func (a *App) getFirstLinkAndImages(c request.CTX, str string) (string, []string) {
+func (a *App) getFirstLinkAndImages(c request.CTX, str string, userID string) (string, []string) {
 	firstLink := ""
 	images := []string{}
 
 	markdown.Inspect(str, func(blockOrInline any) bool {
 		switch v := blockOrInline.(type) {
 		case *markdown.Autolink:
-			if link := v.Destination(); firstLink == "" && a.isLinkAllowedForPreview(c, link) {
+			if link := v.Destination(); firstLink == "" && a.isLinkAllowedForPreview(c, link, userID) {
 				firstLink = link
 			}
 		case *markdown.InlineImage:
-			if link := v.Destination(); a.isLinkAllowedForPreview(c, link) {
+			if link := v.Destination(); a.isLinkAllowedForPreview(c, link, userID) {
 				images = append(images, link)
 			}
 		case *markdown.ReferenceImage:
-			if link := v.ReferenceDefinition.Destination(); a.isLinkAllowedForPreview(c, link) {
+			if link := v.ReferenceDefinition.Destination(); a.isLinkAllowedForPreview(c, link, userID) {
 				images = append(images, link)
 			}
 		}
@@ -562,10 +581,10 @@ func (a *App) getImagesInMessageAttachments(rctx request.CTX, post *model.Post) 
 	var images []string
 
 	for _, attachment := range post.Attachments() {
-		_, imagesInText := a.getFirstLinkAndImages(rctx, attachment.Text)
+		_, imagesInText := a.getFirstLinkAndImages(rctx, attachment.Text, post.UserId)
 		images = append(images, imagesInText...)
 
-		_, imagesInPretext := a.getFirstLinkAndImages(rctx, attachment.Pretext)
+		_, imagesInPretext := a.getFirstLinkAndImages(rctx, attachment.Pretext, post.UserId)
 		images = append(images, imagesInPretext...)
 
 		for _, field := range attachment.Fields {
@@ -573,7 +592,7 @@ func (a *App) getImagesInMessageAttachments(rctx request.CTX, post *model.Post) 
 				continue
 			}
 			if value, ok := field.Value.(string); ok {
-				_, imagesInFieldValue := a.getFirstLinkAndImages(rctx, value)
+				_, imagesInFieldValue := a.getFirstLinkAndImages(rctx, value, post.UserId)
 				images = append(images, imagesInFieldValue...)
 			}
 		}
@@ -612,7 +631,7 @@ func looksLikeAPermalink(url, siteURL string) bool {
 }
 
 func (a *App) containsPermalink(rctx request.CTX, post *model.Post) bool {
-	link, _ := a.getFirstLinkAndImages(rctx, post.Message)
+	link, _ := a.getFirstLinkAndImages(rctx, post.Message, post.UserId)
 	if link == "" {
 		return false
 	}
