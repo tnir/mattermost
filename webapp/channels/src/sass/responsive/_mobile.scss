@@ -358,6 +358,12 @@
                     margin-left: 0; // if left margin of post__content changes, this needs to be adjusted accordingly
                 }
             }
+
+            &.post--comment {
+                .post__body {
+                    padding: 0;
+                }
+            }
         }
     }
 
