@@ -55,14 +55,14 @@
     "dotenv": "17.4.2",
     "luxon": "3.7.2",
     "mime-types": "3.0.2",
-    "uuid": "13.0.0"
+    "uuid": "14.0.0"
   },
   "devDependencies": {
     "@rollup/plugin-typescript": "12.3.0",
     "@types/luxon": "3.7.1",
     "@types/mime-types": "3.0.1",
     "@types/node": "25.6.0",
-    "rollup": "4.60.1",
+    "rollup": "4.60.4",
     "rollup-plugin-copy": "3.5.0"
   },
   "peerDependencies": {
