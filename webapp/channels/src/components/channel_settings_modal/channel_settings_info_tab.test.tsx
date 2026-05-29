@@ -491,7 +491,8 @@ describe('ChannelSettingsInfoTab', () => {
         expect(privateButton).toHaveClass('selected');
     });
 
-    it('should never allow conversion from private to public', async () => {
+    // engage-chat feature: skip since now user can convert from private to public
+    xit('should never allow conversion from private to public', async () => {
         // Set convert permission to true (even with permission, it should be prevented)
         mockConvertToPublicPermission = true;
 
