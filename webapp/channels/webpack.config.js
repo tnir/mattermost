@@ -74,7 +74,7 @@ var config = {
                 include: [
                     path.resolve(__dirname, 'src/i18n'),
                 ],
-                exclude: [/en\.json$/],
+                exclude: [/en\.json$/, /-engage-chat\.json$/],
                 type: 'asset/resource',
                 generator: {
                     filename: 'i18n/[name].[contenthash].json',

@@ -1,0 +1,3 @@
+{
+    "admin.team_channel_settings.convertConfirmModal.toPrivateMessageFirstLine": "When you convert {displayName} to a private channel, history and membership are preserved. Membership in a private channel is by invitation only."
+}

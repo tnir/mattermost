@@ -23,6 +23,7 @@ jobs:
             !server/i18n/en.json
             !server/i18n/en_*.json
             !webapp/channels/src/i18n/en.json
+            !webapp/channels/src/i18n/*-engage-chat.json
 
       - name: Check changed files
         if: steps.changed-files.outputs.any_changed == 'true'

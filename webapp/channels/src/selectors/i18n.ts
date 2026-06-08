@@ -5,10 +5,19 @@ import {General} from 'mattermost-redux/constants';
 import {getConfig} from 'mattermost-redux/selectors/entities/general';
 import {getCurrentUserLocale} from 'mattermost-redux/selectors/entities/i18n';
 
+import customTranslationsEn from 'i18n/en-engage-chat.json';
 import * as I18n from 'i18n/i18n';
+import customTranslationsJa from 'i18n/ja-engage-chat.json';
 
 import type {GlobalState} from 'types/store';
 import type {Translations} from 'types/store/i18n';
+
+export const customTranslations: Record<string, Record<string, string>> = {
+    en: customTranslationsEn,
+    ja: customTranslationsJa,
+};
+
+const mergedCache = new WeakMap<Translations, Translations>();
 
 // This is a placeholder for if we ever implement browser-locale detection
 export function getCurrentLocale(state: GlobalState): string {
@@ -28,12 +37,34 @@ export function getTranslations(state: GlobalState, locale: string): Translation
     const localeInfo = I18n.getLanguageInfo(locale);
 
     let translations;
+    let activeLang: string;
     if (localeInfo) {
         translations = state.views.i18n.translations[locale];
+        activeLang = locale;
     } else {
         // Default to English if an unsupported locale is specified
         translations = state.views.i18n.translations.en;
+        activeLang = 'en';
     }
 
-    return translations;
+    if (!translations) {
+        return translations;
+    }
+
+    const custom = customTranslations[activeLang] || {};
+
+    if (Object.keys(custom).length === 0) {
+        return translations;
+    }
+
+    let merged = mergedCache.get(translations);
+    if (!merged) {
+        merged = {
+            ...translations,
+            ...custom,
+        };
+        mergedCache.set(translations, merged);
+    }
+
+    return merged;
 }
