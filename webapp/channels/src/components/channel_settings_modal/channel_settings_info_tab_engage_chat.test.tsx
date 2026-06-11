@@ -8,6 +8,7 @@ import React from 'react';
 import type {ChannelType} from '@mattermost/types/channels';
 
 import {renderWithContext} from 'tests/react_testing_utils';
+import * as officialChannelUtils from 'utils/official_channel_utils';
 import {TestHelper} from 'utils/test_helper';
 
 import ChannelSettingsInfoTab from './channel_settings_info_tab';
@@ -203,5 +204,17 @@ describe('ChannelSettingsInfoTab Private to Public Conversion (Engage Chat)', ()
 
         // Verify error state is shown in the save panel
         expect(screen.getByText(/There are errors in the form above/)).toBeInTheDocument();
+    });
+
+    it('should disable privacy conversion buttons when the channel is official', () => {
+        const spy = jest.spyOn(officialChannelUtils, 'isOfficialTunagChannel').mockReturnValue(true);
+
+        renderWithContext(<ChannelSettingsInfoTab {...baseProps}/>);
+
+        // Both public and private buttons should be disabled for official channels
+        expect(screen.getByRole('button', {name: /Public Channel/})).toHaveClass('disabled');
+        expect(screen.getByRole('button', {name: /Private Channel/})).toHaveClass('disabled');
+
+        spy.mockRestore();
     });
 });

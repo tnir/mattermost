@@ -90,6 +90,9 @@ function ChannelSettingsInfoTab({
     // SaveChangesPanel state
     const [saveChangesPanelState, setSaveChangesPanelState] = useState<SaveChangesPanelState>();
 
+    // Compute official channel check locally
+    const isOfficial = isOfficialTunagChannel(channel);
+
     // Handler for channel name validation errors
     const handleChannelNameError = useCallback((isError: boolean, errorMessage?: string) => {
         setChannelNameError(errorMessage || '');
@@ -135,6 +138,11 @@ function ChannelSettingsInfoTab({
     }, [dispatch, shouldShowPreviewHeader]);
 
     const handleChannelTypeChange = (type: ChannelType) => {
+        // Official channels cannot change privacy
+        if (isOfficial) {
+            return;
+        }
+
         // engage-chat feature: Allow conversion if user has necessary permission
         if (channel.type === Constants.PRIVATE_CHANNEL && type === Constants.OPEN_CHANNEL && !canConvertToPublic) {
             return;
@@ -373,7 +381,7 @@ function ChannelSettingsInfoTab({
                 onErrorStateChange={handleChannelNameError}
                 urlError={internalUrlError}
                 currentUrl={channelUrl}
-                readOnly={!canManageChannelProperties || isOfficialTunagChannel(channel)}
+                readOnly={!canManageChannelProperties || isOfficial}
                 isEditingExistingChannel={true}
             />
 
@@ -386,12 +394,12 @@ function ChannelSettingsInfoTab({
                     description: formatMessage({id: 'channel_modal.type.public.description', defaultMessage: 'Anyone can join'}),
 
                     // engage-chat feature: enable public button if user has necessary permission
-                    disabled: !canConvertToPublic,
+                    disabled: isOfficial || !canConvertToPublic,
                 }}
                 privateButtonProps={{
                     title: formatMessage({id: 'channel_modal.type.private.title', defaultMessage: 'Private Channel'}),
                     description: formatMessage({id: 'channel_modal.type.private.description', defaultMessage: 'Only invited members'}),
-                    disabled: !canConvertToPrivate,
+                    disabled: isOfficial || !canConvertToPrivate,
                 }}
                 onChange={handleChannelTypeChange}
             />
