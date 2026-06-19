@@ -16,12 +16,14 @@ import LoadingScreen from 'components/loading_screen';
 import * as Menu from 'components/menu';
 import QuickInput from 'components/quick_input';
 import SharedChannelIndicator from 'components/shared_channel_indicator';
+import BuildingIcon from 'components/widgets/icons/building_icon';
 import CheckboxCheckedIcon from 'components/widgets/icons/checkbox_checked_icon';
 import LoadingWrapper from 'components/widgets/loading/loading_wrapper';
 
 import {isArchivedChannel} from 'utils/channel_utils';
 import Constants, {ModalIdentifiers} from 'utils/constants';
 import {isKeyPressed} from 'utils/keyboard';
+import {isOfficialTunagChannel} from 'utils/official_channel_utils';
 import * as UserAgent from 'utils/user_agent';
 
 import type {FilterType} from './browse_channels/browse_channels';
@@ -128,6 +130,8 @@ export class SearchableChannelList extends React.PureComponent<Props, State> {
 
         if (isArchivedChannel(channel)) {
             channelTypeIcon = <ArchiveOutlineIcon size={18}/>;
+        } else if (isOfficialTunagChannel(channel)) {
+            channelTypeIcon = <BuildingIcon size={18}/>;
         } else if (isPrivateChannel(channel)) {
             channelTypeIcon = <LockOutlineIcon size={18}/>;
         } else {

@@ -7,6 +7,8 @@ import {getUser} from 'mattermost-redux/selectors/entities/users';
 
 import store from 'stores/redux_store';
 
+import type {GlobalState} from 'types/store';
+
 /**
  * Regex pattern for official tunag integration admin usernames.
  * Pattern: tunag-{5digits}-{lowercase_alphanumeric_hyphens}-admin
@@ -21,9 +23,10 @@ const OFFICIAL_INTEGRATION_ADMIN_PATTERN = /^tunag-\d{5}-[a-z0-9-]+-admin$/;
  * tunag-{company_id}-{subdomain}-admin
  *
  * @param {Channel | string | null | undefined} channel - Channel object (string input not supported for creator validation)
+ * @param {GlobalState} [state] - Optional Redux state. If not provided, it uses the global store state.
  * @returns {boolean} - true if channel is an official tunag channel, false otherwise
  */
-export function isOfficialTunagChannel(channel: Channel | string | null | undefined): boolean {
+export function isOfficialTunagChannel(channel: Channel | string | null | undefined, state?: GlobalState): boolean {
     // If it's a string, we cannot validate creator, so return false
     if (typeof channel === 'string' || !channel) {
         return false;
@@ -35,8 +38,8 @@ export function isOfficialTunagChannel(channel: Channel | string | null | undefi
     }
 
     // Get the creator user from Redux store
-    const state = store.getState();
-    const creator = getUser(state, channel.creator_id);
+    const currentState = state || store.getState();
+    const creator = getUser(currentState, channel.creator_id);
 
     if (!creator || !creator.username) {
         return false;
