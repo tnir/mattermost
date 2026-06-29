@@ -406,10 +406,8 @@ func (a *App) sanitizeChannelMentionsForUser(rctx request.CTX, post *model.Post,
 			continue
 		}
 
-		// Check if user has permission to read this channel
-		// HasPermissionToReadChannel returns (hasPermission, isMember)
-		hasPermission, _ := a.HasPermissionToReadChannel(rctx, userID, channel)
-		if hasPermission {
+		// Resolve the channel mention if the viewer may see the channel's name/link.
+		if a.HasPermissionToResolveChannelMention(rctx, userID, channel) {
 			// User has permission - include in sanitized props with fresh display_name
 			// Reuse team_name from original props to avoid additional DB query
 			// (team renames are extremely rare and don't warrant the performance cost)
@@ -444,6 +442,14 @@ func (a *App) sanitizeFileAttachmentsForUser(rctx request.CTX, post *model.Post,
 	}
 
 	if !a.Config().FeatureFlags.PermissionPolicies {
+		return
+	}
+
+	// No requesting user (e.g. a system post created by a background job with no
+	// session, such as the ABAC membership sync's channel-join messages). There
+	// is nobody to sanitize attachments for, so skip. A genuine reader re-runs
+	// this with their own session id when the post is served.
+	if userID == "" {
 		return
 	}
 
